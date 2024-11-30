@@ -4,23 +4,19 @@ This script compares locale JSON files, checking for missing or extra keys
 compared to a reference locale file. 
 
 Usage:
-    python compare.py <locale_key>
+    python compare.py --base <locale_key>
 
 Parameters:
-    locale_key : str
-        The locale key representing the base language (e.g., "en" or "zh-Hans"). This key 
-        determines the reference locale file against which all other locale files will be compared. 
-
-Example Usage:
-    python compare.py en
-
-It will compare "en.json" (base locale file) to all other JSON files in the directory.
+    locale_key (optional) : str
+        The locale key represents the base language, defaulted to ‘en’, 
+        which determines the reference locale file against which all other locale files will be compared.
 
 """
 
 import json
 import os
 import sys
+import argparse
 from termcolor import colored
 
 def flatten_dict(d, parent_key=''):
@@ -77,7 +73,11 @@ def main(locale_key):
             print("-" * 40)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python compare.py <locale_key>")
-    else:
-        main(sys.argv[1])
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--base', '-b', 
+        default='zh-Hans',
+        help='The locale key representing the base language (e.g., "en" or "zh-Hans").'
+    )
+    args = parser.parse_args()
+    main(args.base)
